@@ -9,6 +9,23 @@ const browser = await chromium.launch();
 let failed = 0;
 const check = (ok, msg) => { console.log(`${ok ? 'OK  ' : 'FAIL'} ${msg}`); if (!ok) failed++; };
 
+// Klik na záložku dřív, než se načte rules.json (pomalá síť), se nesmí ztratit.
+{
+  const ctx = await browser.newContext({ viewport: { width: 360, height: 780 } });
+  await ctx.route('**/rules.json', async (route) => {
+    await new Promise((r) => setTimeout(r, 1500));
+    await route.continue();
+  });
+  const page = await ctx.newPage();
+  await page.goto(BASE, { waitUntil: 'domcontentloaded' });
+  const before = await page.locator('#osvc-income').count();
+  await page.getByRole('tab', { name: 'Paušál, nebo přiznání?' }).click();
+  await page.locator('#panel-osvc:not([hidden]) #osvc-income').waitFor({ timeout: 10000 });
+  check(before === 0, 'pomalá síť: klik proběhl ještě před inicializací');
+  check(page.url().endsWith('#osvc'), 'pomalá síť: klik před načtením nastaví #osvc a otevře záložku');
+  await ctx.close();
+}
+
 for (const scheme of ['light', 'dark']) {
   const ctx = await browser.newContext({ viewport: { width: 360, height: 780 }, deviceScaleFactor: 2, colorScheme: scheme });
   const external = [];
@@ -67,7 +84,8 @@ for (const scheme of ['light', 'dark']) {
 
   // Záložka zpět na EET funguje.
   await page.getByRole('tab', { name: 'Mám EET?' }).click();
-  check(await page.locator('#panel-eet:not([hidden]) #intro:not([hidden])').count() === 1, `${scheme}: návrat na Mám EET?`);
+  const back = await page.locator('#panel-eet:not([hidden]) #intro:not([hidden])').waitFor({ timeout: 5000 }).then(() => true, () => false);
+  check(back, `${scheme}: návrat na Mám EET?`);
 
   check(external.length === 0, `${scheme}: žádné externí požadavky ${external.join(', ')}`);
   check(errors.length === 0, `${scheme}: žádné JS chyby ${errors.join(' | ')}`);
