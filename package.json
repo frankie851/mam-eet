@@ -1,0 +1,10 @@
+{
+  "name": "mam-eet",
+  "private": true,
+  "description": "Mám EET? – průvodce EET 2.0 pro podnikatele",
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  }
+}
