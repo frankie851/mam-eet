@@ -6,11 +6,12 @@
   <meta http-equiv="Content-Security-Policy"
         content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
   <meta name="referrer" content="no-referrer">
-  <meta name="description" content="Krátký dotazník: musíš od 1. 1. 2027 evidovat tržby v EET 2.0? Můžeš zvolit EET OFF? Co udělat a do kdy.">
+  <meta name="description" content="Musíš od 1. 1. 2027 evidovat tržby v EET 2.0? A vyplatí se ti v roce 2027 paušální daň, přiznání, nebo EET OFF?">
   <title>Mám EET?</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23215ad6'/%3E%3Cpath d='M9 16.5l4.5 4.5L23 11.5' stroke='white' stroke-width='3.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="styles.css">
   <script type="module" src="app.js"></script>
+  <script type="module" src="osvc-app.js"></script>
 </head>
 <body>
   <a class="skip" href="#main">Přeskočit na obsah</a>
@@ -18,19 +19,26 @@
     <div class="wrap">
       <p class="brand" id="brand">Mám EET?</p>
       <p class="tagline" id="tagline"></p>
+      <div class="tabs" id="tabs" role="tablist" aria-label="Nástroje">
+        <button type="button" class="tab" role="tab" id="tab-eet" aria-controls="panel-eet" aria-selected="true">Mám EET?</button>
+        <button type="button" class="tab" role="tab" id="tab-osvc" aria-controls="panel-osvc" aria-selected="false" tabindex="-1">Paušál, nebo přiznání?</button>
+      </div>
     </div>
   </header>
 
   <main id="main" class="wrap" tabindex="-1">
-    <noscript>
-      <p class="notice">Průvodce potřebuje JavaScript. Odpovědi se i tak nikam neodesílají.</p>
-    </noscript>
-    <section id="intro" hidden></section>
-    <section id="quiz" hidden aria-live="polite"></section>
-    <section id="result" hidden></section>
-    <section id="calc" hidden></section>
-    <section id="checklist" hidden></section>
-    <div id="actions" class="actions" hidden></div>
+    <div id="panel-eet" role="tabpanel" aria-labelledby="tab-eet">
+      <noscript>
+        <p class="notice">Průvodce potřebuje JavaScript. Odpovědi se i tak nikam neodesílají.</p>
+      </noscript>
+      <section id="intro" hidden></section>
+      <section id="quiz" hidden aria-live="polite"></section>
+      <section id="result" hidden></section>
+      <section id="calc" hidden></section>
+      <section id="checklist" hidden></section>
+      <div id="actions" class="actions" hidden></div>
+    </div>
+    <div id="panel-osvc" role="tabpanel" aria-labelledby="tab-osvc" hidden></div>
   </main>
 
   <footer class="site-footer">

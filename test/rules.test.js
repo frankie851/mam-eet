@@ -13,7 +13,10 @@ const rules = JSON.parse(readFileSync(new URL('../rules.json', import.meta.url),
 
 // Hodnoty pro asserty bereme z rules.json, aby test hlídal logiku, ne opsané částky.
 const off = rules.eetOff;
-const OFFICIAL_HOSTS = ['eet.gov.cz', 'mf.gov.cz', 'financnisprava.gov.cz'];
+const OFFICIAL_HOSTS = [
+  'eet.gov.cz', 'mf.gov.cz', 'financnisprava.gov.cz', 'adisspr.mfcr.cz',
+  'e-sbirka.gov.cz', 'cssz.gov.cz', 'vzp.cz', 'mpsv.gov.cz',
+];
 
 function isOfficial(url) {
   return OFFICIAL_HOSTS.includes(new URL(url).hostname);
@@ -308,7 +311,7 @@ describe('integrita rules.json a kódu', () => {
     assert.doesNotMatch(raw, /300\s?000/);
   });
 
-  for (const file of ['rules.js', 'app.js']) {
+  for (const file of ['rules.js', 'app.js', 'osvc.js', 'osvc-app.js', 'dom.js']) {
     test(`${file} nemá natvrdo zapsané částky, limity ani data`, () => {
       const src = readFileSync(new URL(`../${file}`, import.meta.url), 'utf8')
         .replace(/\/\*[\s\S]*?\*\//g, '')
