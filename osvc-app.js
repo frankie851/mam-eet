@@ -30,8 +30,10 @@ const byId = (list, id) => list.find((x) => x.id === id);
 
 /* ---------- Záložky ---------- */
 
+// Záložky jsou odkazy (#eet, #osvc): klik změní adresu i dřív, než se načte tento skript,
+// a po načtení se otevře záložka podle adresy. Přepínání proto řídí jen událost hashchange.
 const TABS = [
-  { id: 'eet', tab: 'tab-eet', panel: 'panel-eet', hash: '' },
+  { id: 'eet', tab: 'tab-eet', panel: 'panel-eet', hash: '#eet' },
   { id: 'osvc', tab: 'tab-osvc', panel: 'panel-osvc', hash: '#osvc' },
 ];
 
@@ -53,13 +55,12 @@ function selectTab(id, { focus = false } = {}) {
 function setupTabs() {
   $('tab-eet').textContent = tx.tabEet;
   $('tab-osvc').textContent = tx.tabOsvc;
-  for (const t of TABS) {
-    $(t.tab).addEventListener('click', () => {
-      history.replaceState(null, '', t.hash || location.pathname + location.search);
-      selectTab(t.id);
-    });
-  }
   $('tabs').addEventListener('keydown', (e) => {
+    if (e.key === ' ') {
+      e.preventDefault();
+      e.target.closest('[role="tab"]')?.click();
+      return;
+    }
     if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' && e.key !== 'Home' && e.key !== 'End') return;
     e.preventDefault();
     const i = TABS.findIndex((t) => t.id === activeTab());
@@ -68,7 +69,7 @@ function setupTabs() {
     if (e.key === 'ArrowLeft') j = (i - 1 + TABS.length) % TABS.length;
     if (e.key === 'Home') j = 0;
     if (e.key === 'End') j = TABS.length - 1;
-    history.replaceState(null, '', TABS[j].hash || location.pathname + location.search);
+    history.replaceState(null, '', TABS[j].hash);
     selectTab(TABS[j].id, { focus: true });
   });
   window.addEventListener('hashchange', () => selectTab(activeTab()));
