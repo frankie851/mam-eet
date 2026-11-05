@@ -15,6 +15,11 @@
   --off-border: #b26a00;
   --error: #b3261e;
   --radius: 10px;
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --grid: #e4e7ec;
+  --cheapest-bg: #e8f5ec;
   color-scheme: light;
 }
 
@@ -34,6 +39,11 @@
     --off-bg: #3a2c0c;
     --off-border: #ffb74d;
     --error: #ff8a80;
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
+    --grid: #2a2f37;
+    --cheapest-bg: #13301c;
     color-scheme: dark;
   }
 }
@@ -53,10 +63,16 @@
   --off-bg: #3a2c0c;
   --off-border: #ffb74d;
   --error: #ff8a80;
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --grid: #2a2f37;
+  --cheapest-bg: #13301c;
   color-scheme: dark;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
 
 html { -webkit-text-size-adjust: 100%; }
 
@@ -207,6 +223,117 @@ legend { font-size: 1.35rem; font-weight: 700; line-height: 1.3; margin-bottom: 
 .deadline.hard strong { color: var(--must-border); }
 .available { color: var(--muted); }
 
+/* Záložky */
+.tabs { display: flex; gap: 4px; margin-top: 10px; flex-wrap: wrap; }
+.tab {
+  font: inherit;
+  font-size: 0.95rem;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-bottom-width: 3px;
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  flex: 1 1 auto;
+}
+.tab[aria-selected="true"] { background: var(--surface); border-bottom-color: var(--accent); font-weight: 700; }
+
+/* OSVČ 2027 – formulář */
+.osvc-form { display: grid; gap: 18px; margin-top: 16px; }
+.field-legend { font-weight: 700; font-size: 1.05rem; margin: 0 0 4px; padding: 0; }
+.field .options { margin-top: 6px; }
+.options.inline { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.osvc-form .error:empty { min-height: 0; margin: 0; }
+.field.number { margin-top: 0; }
+.field .help { margin-bottom: 0; }
+.osvc-form .nav { margin-top: 0; }
+
+/* OSVČ 2027 – výsledek */
+#osvc-result { margin-top: 8px; }
+#osvc-result h2:focus { outline: none; }
+.summary { font-weight: 700; font-size: 1.1rem; }
+.variants { width: 100%; border-collapse: collapse; margin: 8px 0 12px; background: var(--surface); border-radius: var(--radius); }
+.variants th, .variants td { padding: 10px 8px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+.variants .num { text-align: right; white-space: nowrap; overflow-wrap: normal; font-variant-numeric: tabular-nums; }
+.variants thead th { font-size: 0.9rem; color: var(--muted); font-weight: 600; }
+.variants tr.cheapest { background: var(--cheapest-bg); }
+.variants tr.cheapest th[scope="row"] { box-shadow: inset 4px 0 0 var(--not-border); }
+.variants tr.unavailable th, .variants tr.unavailable td { color: var(--muted); }
+.variants tr.unavailable td { white-space: normal; text-align: left; }
+.badge {
+  display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: 999px;
+  background: var(--not-border); color: var(--surface); font-size: 0.8rem; font-weight: 700; vertical-align: 1px;
+}
+.bands ul, .links, .status-list, .breakdown ul { padding-left: 1.2rem; }
+.breakdown { margin-top: 12px; }
+.breakdown summary, .chart-table summary, .panel-footer summary { cursor: pointer; font-weight: 600; min-height: 32px; }
+.breakdown .source { display: block; }
+
+@media (max-width: 34rem) {
+  .variants thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .variants tr { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-bottom: 1px solid var(--border); }
+  .variants th, .variants td { border-bottom: 0; padding: 6px 8px; }
+  .variants th[scope="row"] { grid-column: 1 / -1; padding-top: 10px; }
+  .variants td.num { text-align: left; font-size: 0.95rem; }
+  .variants td::before { content: attr(data-label); display: block; font-size: 0.8rem; color: var(--muted); }
+  .variants tr.unavailable td { grid-column: 1 / -1; }
+  .variants tr.unavailable td::before { display: none; }
+}
+
+/* OSVČ 2027 – graf */
+#osvc-chart { padding-bottom: 16px; }
+.legend { list-style: none; padding: 0; margin: 8px 0; display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.95rem; }
+.legend li { display: flex; align-items: center; gap: 6px; }
+.swatch { display: inline-block; width: 14px; height: 4px; border-radius: 2px; flex: none; }
+.swatch.series-1 { background: var(--series-1); }
+.swatch.series-2 { background: var(--series-2); }
+.swatch.series-3 { background: var(--series-3); }
+.chart-plot { position: relative; width: 100%; }
+.chart { display: block; max-width: 100%; height: auto; }
+.chart .grid { stroke: var(--grid); stroke-width: 1; }
+.chart .axis { stroke: var(--muted); stroke-width: 1; }
+.chart .tick { fill: var(--muted); font-size: 12px; }
+.chart .direct-label { fill: var(--text); font-size: 12px; font-weight: 600; }
+.chart .line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.chart .line.series-1 { stroke: var(--series-1); }
+.chart .line.series-2 { stroke: var(--series-2); }
+.chart .line.series-3 { stroke: var(--series-3); }
+.chart .you { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 4 4; }
+.chart .you-label { fill: var(--text); font-weight: 600; }
+.chart .breakeven-dot { fill: var(--text); stroke: var(--surface); stroke-width: 2; }
+.chart .crosshair { stroke: var(--muted); stroke-width: 1; }
+.chart .hover-dot { stroke: var(--surface); stroke-width: 2; }
+.chart .hover-dot.series-1 { fill: var(--series-1); }
+.chart .hover-dot.series-2 { fill: var(--series-2); }
+.chart .hover-dot.series-3 { fill: var(--series-3); }
+.chart .overlay { fill: transparent; cursor: crosshair; }
+.chart .overlay:focus { outline: none; }
+.chart:has(.overlay:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; }
+.chart-tooltip {
+  position: absolute; z-index: 2; pointer-events: none;
+  background: var(--surface); color: var(--text);
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 8px 10px; font-size: 0.9rem; box-shadow: 0 2px 8px rgb(0 0 0 / 0.15);
+  min-width: 11rem; max-width: 15rem;
+}
+.chart-tooltip p { margin: 0; }
+.tt-head { color: var(--muted); margin-bottom: 4px !important; }
+.tt-row { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.breakeven { font-weight: 700; margin-top: 10px; }
+.table-scroll { overflow-x: auto; }
+.data { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+.data th, .data td { padding: 4px 6px; border-bottom: 1px solid var(--border); }
+.data .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* OSVČ 2027 – termíny a patička panelu */
+#osvc-deadlines .todo-title { display: block; }
+.links li { margin-bottom: 6px; }
+.panel-footer { margin-top: 24px; border-top: 1px solid var(--border); padding-top: 12px; font-size: 0.95rem; }
+.status-list li { margin-bottom: 8px; }
+.status-list .source { display: block; }
+
 /* Patička */
 .site-footer {
   border-top: 1px solid var(--border);
@@ -220,7 +347,7 @@ legend { font-size: 1.35rem; font-weight: 700; line-height: 1.3; margin-bottom: 
 @media print {
   :root { --bg: #fff; --surface: #fff; --text: #000; --muted: #333; --border: #999; }
   body { font-size: 11pt; background: #fff; }
-  .site-header, #intro, #quiz, #calc, #actions, .skip, #checklist .btn, .card { display: none !important; }
+  .tabs, .osvc-form, #osvc-chart .chart-plot, .site-header, #intro, #quiz, #calc, #actions, .skip, #checklist .btn, .card { display: none !important; }
   #result .reasons, #result h2, #result > p { display: none; }
   .verdict { border: 1px solid #000; background: none; }
   #checklist { border: 0; padding: 0; }

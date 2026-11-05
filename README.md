@@ -1,6 +1,9 @@
 # Mám EET? – průvodce EET 2.0 pro podnikatele
 
-Statický web v češtině. Podnikateli po nejvýše 8 otázkách řekne:
+Statický web v češtině se dvěma záložkami: **Mám EET?** (průvodce EET 2.0) a **Paušál, nebo přiznání?**
+(kalkulačka odvodů OSVČ pro rok 2027, adresa `#osvc`).
+
+Průvodce EET podnikateli po nejvýše 8 otázkách řekne:
 
 1. zda musí od 1. 1. 2027 evidovat tržby v EET 2.0,
 2. zda může zvolit režim EET OFF a kolik ho to bude stát,
@@ -13,16 +16,51 @@ Odpovědi zůstávají jen v paměti otevřené stránky. Nic se neukládá (ž�
 a nic se neodesílá. Stránka nemá analytiku a hlavička Content-Security-Policy povoluje jen soubory
 z vlastního webu.
 
+## Kalkulačka „Paušál, nebo přiznání?“ (OSVČ 2027)
+
+Spočítá roční odvody (daň + sociální + zdravotní pojištění) ve třech variantách a zvýrazní nejlevnější:
+
+1. **Paušální daň** v nejnižším pásmu, na které má podnikatel nárok (12 × měsíční paušální záloha).
+2. **Přiznání** s výdajovým paušálem (se stropem) nebo se skutečnými výdaji: daň 15 % (23 % nad 36násobkem
+   průměrné mzdy) − sleva na poplatníka − daňové zvýhodnění na děti (případně bonus), sociální
+   max(55 % zisku, roční minimum) × 29,2 %, zdravotní max(50 % zisku, roční minimum) × 13,5 %.
+3. **EET OFF**: paušál 1. pásma + 12 × přirážka (jen 1. pásmo a příjmy do 1 mil. Kč).
+
+U nedostupných variant uvede důvod (např. plátce DPH, zaměstnanec, 2. pásmo). Graf ukazuje odvody pro příjmy
+100 tis. – 2 mil. Kč s body zlomu, pod grafem je tabulkový pohled. Dále termíny (přihláška do 11. 1. 2027,
+první platba do 20. 1. 2027) a odkazy na tiskopisy finanční správy.
+
+Zaokrouhlení: základ daně dolů na stovky, daň a pojistné nahoru na koruny, pojistné se počítá z ročního
+základu. Proto u zisku 200 000 Kč a 2 dětí vychází 67 687 Kč. Tabulky, které počítají 12 × měsíční záloha,
+uvádějí 67 704 Kč.
+
+Parametry jsou v `rules.json` v sekci `osvc2027`. Přirážku, limit a termín EET OFF kalkulačka bere ze sekce
+`eetOff`, takže jsou zapsané jen jednou. U každé hodnoty je `status`:
+- `official`: přečteno na oficiálním webu,
+- `secondary`: oficiální web (ČSSZ, VZP, e-Sbírka) nebyl při ověřování dostupný, hodnota je ověřená shodou
+  více zdrojů a přepočtem ze zákonného vzorce,
+- `derived`: dopočet ze zákona, úřad hodnotu zatím nezveřejnil (1. pásmo 2027: 9 662 Kč).
+
+**Před ostrým nasazením zkontrolujte** u zdroje hodnoty se stavem `secondary` a `derived`, hlavně tabulku
+paušální daně 2027 na financnisprava.gov.cz, rozhodnou částku pro vedlejší činnost na cssz.gov.cz a to,
+zda se podmínka daňového bonusu (6 × minimální mzda) posuzuje z příjmů. Kalkulačka ji posuzuje z příjmů.
+
+Kalkulačka nepočítá slevu za evidenci tržeb, další slevy (manžel/ka, student, školkovné), nemocenské
+pojištění, odčitatelné položky ani děti se ZTP/P.
+
 ## Struktura
 
 | Soubor | Co obsahuje |
 |---|---|
 | `rules.json` | **Všechna** pravidla, částky, limity, termíny a texty. U každé položky je zdroj (URL) a datum ověření (`verified`). |
 | `rules.js` | Rozhodovací logika. Čisté funkce bez DOM: `evaluate`, `visibleQuestions`, `compareCosts`, `buildChecklist`. |
-| `app.js` | Uživatelské rozhraní: dotazník, výsledek, kalkulačka, kontrolní seznam, patička. |
+| `osvc.js` | Výpočty kalkulačky OSVČ 2027, čisté funkce bez DOM: `classic`, `flatTax`, `eetOffVariant`, `compare`, `series`, `breakEven`. |
+| `app.js` | Uživatelské rozhraní průvodce EET: dotazník, výsledek, kalkulačka, kontrolní seznam, patička. |
+| `osvc-app.js` | Uživatelské rozhraní kalkulačky OSVČ a přepínání záložek. Graf je inline SVG bez knihoven. |
+| `dom.js` | Sdílené pomocníky pro tvorbu prvků (`h`, `put`, `sourceLink`). |
 | `index.html`, `styles.css` | Stránka a vzhled (mobil od 360 px, tmavý režim, tisková verze). |
-| `test/rules.test.js` | Testy pro `node --test`. |
-| `tools/e2e-scenare.mjs` | Volitelný průchod 7 scénáři v prohlížeči (Playwright). |
+| `test/rules.test.js`, `test/osvc.test.js` | Testy pro `node --test`. |
+| `tools/e2e-scenare.mjs`, `tools/e2e-osvc.mjs` | Volitelný průchod scénáři v prohlížeči (Playwright, šířka 360 px). |
 
 ## Spuštění
 
@@ -54,6 +92,7 @@ Průchod scénáři v prohlížeči (volitelný, potřebuje balíček `playwrigh
 
 ```bash
 BASE_URL=http://127.0.0.1:8000/ node tools/e2e-scenare.mjs /tmp
+BASE_URL=http://127.0.0.1:8000/ node tools/e2e-osvc.mjs /tmp
 ```
 
 ## Jak upravit `rules.json`, když finanční správa změní výklad
@@ -74,7 +113,8 @@ BASE_URL=http://127.0.0.1:8000/ node tools/e2e-scenare.mjs /tmp
    `{launch}`. Doplní se z čísel výše, takže částku stačí změnit na jednom místě.
 3. **Aktualizujte zdroj.** U změněné položky upravte `source` (URL oficiální stránky, ideálně s kotvou
    na konkrétní odstavec), `sourceTitle` a `verified` (datum, kdy jste zdroj četli). Zdroje se přijímají
-   jen z domén `eet.gov.cz`, `mf.gov.cz` a `financnisprava.gov.cz`, jinak test selže.
+   jen z oficiálních domén (`eet.gov.cz`, `mf.gov.cz`, `financnisprava.gov.cz`, `adisspr.mfcr.cz`,
+   `e-sbirka.gov.cz`, `cssz.gov.cz`, `vzp.cz`, `mpsv.gov.cz`), jinak test selže.
 4. **Aktualizujte datum kontroly** v `meta.lastVerified`. Zobrazuje se v patičce.
 5. **Nové pravidlo:** přidejte položku do příslušného seznamu se stejnými klíči jako ostatní. Nový obor
    nebo způsob placení se v dotazníku objeví sám. Pokud jde o novou podmínku (nová otázka nebo nové

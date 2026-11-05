@@ -594,5 +594,391 @@
     "errorLoad": "Nepodařilo se načíst pravidla (rules.json). Spusť web přes webový server, viz README.",
     "validationMulti": "Vyber aspoň jednu možnost.",
     "validationNumber": "Zadej celé číslo, nejméně {min}."
+  },
+  "osvc2027": {
+    "year": 2027,
+    "monthsPerYear": 12,
+    "verificationNote": "Hodnoty se stavem „official“ jsem přečetl na oficiálním webu. Stav „secondary“ znamená, že oficiální web (ČSSZ, VZP, e-Sbírka) nebyl z prostředí dostupný a hodnota je ověřená shodou více zdrojů a přepočtem ze zákonného vzorce. Stav „derived“ je dopočet ze zákona, který úřad zatím nezveřejnil.",
+    "averageWage": {
+      "monthly": 51663,
+      "note": "Průměrná mzda pro rok 2027 = 48 900 Kč × 1,0565, zaokrouhleno nahoru.",
+      "status": "secondary",
+      "source": "https://e-sbirka.gov.cz/sb/2026/177",
+      "sourceTitle": "Nařízení vlády č. 177/2026 Sb.",
+      "verified": "2026-11-05"
+    },
+    "social": {
+      "rate": 0.292,
+      "profitShare": 0.55,
+      "minBaseShareMain": 0.35,
+      "minBaseShareSide": 0.11,
+      "maxBaseAverageWageMultiple": 48,
+      "sideThresholdAverageWageMultiple": 2.4,
+      "expected": {
+        "minAdvanceMain": 5281,
+        "minAdvanceSide": 1660,
+        "minBaseMain": 18083,
+        "minBaseSide": 5683,
+        "maxBaseAnnual": 2479824,
+        "sideThreshold": 123991
+      },
+      "note": "Rozhodná částka pro vedlejší činnost (2,4 × průměrná mzda) je přepočet ze zákona, ČSSZ ji zatím nebylo možné ověřit.",
+      "status": "secondary",
+      "source": "https://e-sbirka.gov.cz/sb/1992/589",
+      "sourceTitle": "Zákon č. 589/1992 Sb., o pojistném na sociální zabezpečení",
+      "verified": "2026-11-05",
+      "sideSource": "https://e-sbirka.gov.cz/sb/1995/155",
+      "sideSourceTitle": "Zákon č. 155/1995 Sb., o důchodovém pojištění, § 9"
+    },
+    "health": {
+      "rate": 0.135,
+      "profitShare": 0.5,
+      "minBaseShareMain": 0.5,
+      "expected": {
+        "minAdvanceMain": 3488,
+        "minBaseMain": 25832
+      },
+      "status": "secondary",
+      "source": "https://e-sbirka.gov.cz/sb/1992/592",
+      "sourceTitle": "Zákon č. 592/1992 Sb., o pojistném na veřejné zdravotní pojištění",
+      "verified": "2026-11-05"
+    },
+    "incomeTax": {
+      "rate": 0.15,
+      "highRate": 0.23,
+      "highRateAverageWageMultiple": 36,
+      "baseRoundDownTo": 100,
+      "taxpayerCredit": 30840,
+      "childCredits": [
+        15204,
+        22320,
+        27840
+      ],
+      "bonusMinIncomeMinimumWageMultiple": 6,
+      "bonusMinAnnual": 100,
+      "minimumWage": 24900,
+      "minimumWageSource": "https://e-sbirka.gov.cz/sb/2026/164",
+      "minimumWageSourceTitle": "Nařízení vlády č. 164/2026 Sb. (minimální mzda 2027)",
+      "note": "Podmínku pro daňový bonus (příjmy aspoň 6 × minimální mzda) posuzujeme z příjmů, ne ze zisku.",
+      "status": "secondary",
+      "source": "https://e-sbirka.gov.cz/sb/1992/586",
+      "sourceTitle": "Zákon č. 586/1992 Sb., o daních z příjmů (§ 7, § 16, § 35ba, § 35c)",
+      "verified": "2026-11-05"
+    },
+    "expenseFlatRates": [
+      {
+        "id": "p80",
+        "rate": 0.8,
+        "cap": 1600000,
+        "label": "80 % – zemědělství, lesnictví, řemeslné živnosti"
+      },
+      {
+        "id": "p60",
+        "rate": 0.6,
+        "cap": 1200000,
+        "label": "60 % – ostatní živnosti (volné, vázané, koncesované)"
+      },
+      {
+        "id": "p40",
+        "rate": 0.4,
+        "cap": 800000,
+        "label": "40 % – svobodná povolání, autorská práva, jiné podnikání"
+      },
+      {
+        "id": "p30",
+        "rate": 0.3,
+        "cap": 600000,
+        "label": "30 % – nájem majetku v obchodním majetku"
+      }
+    ],
+    "expenseFlatRatesSource": "https://e-sbirka.gov.cz/sb/1992/586",
+    "expenseFlatRatesSourceTitle": "Zákon č. 586/1992 Sb., § 7 odst. 7",
+    "verified": "2026-11-05",
+    "activities": [
+      {
+        "id": "main",
+        "label": "Hlavní činnost",
+        "flatTaxAllowed": true,
+        "healthMinimum": true,
+        "socialSide": false
+      },
+      {
+        "id": "sideEmployed",
+        "label": "Vedlejší – zároveň jsem zaměstnanec",
+        "flatTaxAllowed": false,
+        "healthMinimum": false,
+        "socialSide": true
+      },
+      {
+        "id": "sideOther",
+        "label": "Vedlejší – studuji, pobírám důchod nebo jsem na rodičovské",
+        "flatTaxAllowed": true,
+        "healthMinimum": false,
+        "socialSide": true
+      }
+    ],
+    "flatTax": {
+      "maxIncome": 2000000,
+      "bands": [
+        {
+          "id": "band1",
+          "label": "1. pásmo",
+          "monthly": 9662,
+          "tax": 100,
+          "social": 6074,
+          "health": 3488,
+          "socialFromMinAdvanceMultiple": 1.15,
+          "limits": {
+            "p80": 2000000,
+            "p60": 1500000,
+            "p40": 1000000,
+            "p30": 1000000
+          },
+          "status": "derived",
+          "note": "Finanční správa tabulku pro rok 2027 zatím nezveřejnila. Částka je dopočtená stejně jako oficiální částky 2026: daň 100 Kč + minimální záloha na sociální pojištění × 1,15 (zaokrouhleno nahoru) + minimální záloha na zdravotní pojištění.",
+          "source": "https://financnisprava.gov.cz/cs/financni-sprava/media-a-verejnost/tiskove-zpravy-gfr/tiskove-zpravy-2026/zajem-o-pausalni-dan-roste-letos",
+          "sourceTitle": "FS, tisková zpráva 19. 1. 2026 (výpočet 1. pásma 2026)",
+          "verified": "2026-11-05"
+        },
+        {
+          "id": "band2",
+          "label": "2. pásmo",
+          "monthly": 16745,
+          "tax": 4963,
+          "social": 8191,
+          "health": 3591,
+          "limits": {
+            "p80": 2000000,
+            "p60": 2000000,
+            "p40": 1500000,
+            "p30": 1500000
+          },
+          "status": "official",
+          "source": "https://financnisprava.gov.cz/cs/dane/dane/dan-z-prijmu/pausalni-dan/obecne-informace",
+          "sourceTitle": "financnisprava.gov.cz – Paušální daň, obecné informace",
+          "verified": "2026-11-05"
+        },
+        {
+          "id": "band3",
+          "label": "3. pásmo",
+          "monthly": 27139,
+          "tax": 9320,
+          "social": 12527,
+          "health": 5292,
+          "limits": {
+            "p80": 2000000,
+            "p60": 2000000,
+            "p40": 2000000,
+            "p30": 2000000
+          },
+          "status": "official",
+          "source": "https://financnisprava.gov.cz/cs/dane/dane/dan-z-prijmu/pausalni-dan/obecne-informace",
+          "sourceTitle": "financnisprava.gov.cz – Paušální daň, obecné informace",
+          "verified": "2026-11-05"
+        }
+      ],
+      "conditionsSource": "https://financnisprava.gov.cz/cs/dane/dane/dan-z-prijmu/pausalni-dan/obecne-informace",
+      "conditionsSourceTitle": "financnisprava.gov.cz – Paušální daň, obecné informace",
+      "verified": "2026-11-05"
+    },
+    "deadlines": [
+      {
+        "id": "notice",
+        "date": "2027-01-11",
+        "title": "Přihláška k paušální dani (a k EET OFF)",
+        "text": "Oznámení o vstupu do paušálního režimu, o změně pásma nebo o přihlášení k přirážce EET OFF podáš finančnímu úřadu nejpozději {date}. Desátý den roku 2027 připadá na neděli, proto termín končí v pondělí. Pozdní oznámení je neúčinné. Kdo už v paušálním režimu je a pásmo nemění, nic nepodává.",
+        "source": "https://eet.gov.cz/cs/eet-off/jak-a-kdy-se-prihlasit-k-rezimu-eet-off",
+        "sourceTitle": "eet.gov.cz – Jak a kdy se přihlásit k režimu EET OFF",
+        "verified": "2026-11-05"
+      },
+      {
+        "id": "firstPayment",
+        "date": "2027-01-20",
+        "title": "První paušální záloha za leden 2027",
+        "text": "Paušální zálohu platíš do 20. dne každého měsíce. Za leden 2027 tedy nejpozději {date}. Pokud máš trvalý příkaz, uprav ho na novou částku.",
+        "source": "https://financnisprava.gov.cz/cs/dane/dane/dan-z-prijmu/pausalni-dan/obecne-informace",
+        "sourceTitle": "financnisprava.gov.cz – Paušální daň, obecné informace",
+        "verified": "2026-11-05"
+      }
+    ],
+    "links": [
+      {
+        "id": "form5255",
+        "title": "Tiskopis 25 5255 – Oznámení o vstupu do paušálního režimu (PDF)",
+        "source": "https://financnisprava.gov.cz/assets/tiskopisy/5255_3.pdf",
+        "sourceTitle": "financnisprava.gov.cz",
+        "verified": "2026-11-05"
+      },
+      {
+        "id": "epo5255",
+        "title": "Elektronické podání oznámení o vstupu (EPO)",
+        "source": "https://adisspr.mfcr.cz/dpr/adis/idpr_epo/epo2/form/form_uvod.faces?pisemnost=DPFOPR&ext=t",
+        "sourceTitle": "Daňový portál finanční správy",
+        "verified": "2026-11-05"
+      },
+      {
+        "id": "form5260",
+        "title": "Tiskopis 25 5260 – Oznámení o změně pásma paušálního režimu (PDF)",
+        "source": "https://financnisprava.gov.cz/assets/tiskopisy/5260_1.pdf",
+        "sourceTitle": "financnisprava.gov.cz",
+        "verified": "2026-11-05"
+      },
+      {
+        "id": "eetOff",
+        "title": "Jak se přihlásit k režimu EET OFF",
+        "source": "https://eet.gov.cz/cs/eet-off/jak-a-kdy-se-prihlasit-k-rezimu-eet-off",
+        "sourceTitle": "eet.gov.cz",
+        "verified": "2026-11-05"
+      },
+      {
+        "id": "forms",
+        "title": "Všechny daňové tiskopisy",
+        "source": "https://financnisprava.gov.cz/cs/dane/danove-tiskopisy",
+        "sourceTitle": "financnisprava.gov.cz",
+        "verified": "2026-11-05"
+      },
+      {
+        "id": "pausal",
+        "title": "Paušální daň – podmínky a pásma",
+        "source": "https://financnisprava.gov.cz/cs/dane/dane/dan-z-prijmu/pausalni-dan/obecne-informace",
+        "sourceTitle": "financnisprava.gov.cz",
+        "verified": "2026-11-05"
+      }
+    ],
+    "chart": {
+      "min": 100000,
+      "max": 2000000,
+      "step": 10000,
+      "tickStep": 500000,
+      "breakEvenStep": 1000,
+      "tableStep": 100000,
+      "yTickSteps": [
+        50000,
+        100000,
+        200000,
+        250000
+      ],
+      "yTickTarget": 6,
+      "layout": {
+        "marginLeft": 56,
+        "marginRight": 92,
+        "marginTop": 20,
+        "marginBottom": 36,
+        "height": 320,
+        "heightNarrow": 280,
+        "narrowWidth": 480,
+        "minWidth": 280,
+        "labelGap": 15,
+        "markerRadius": 5,
+        "tickLength": 4,
+        "tooltipOffset": 12,
+        "marginRightNarrow": 12,
+        "minTickSpacing": 56,
+        "labelLift": 8
+      }
+    },
+    "texts": {
+      "tabEet": "Mám EET?",
+      "tabOsvc": "Paušál, nebo přiznání?",
+      "title": "OSVČ 2027: paušální daň, přiznání, nebo EET OFF?",
+      "intro": "Spočítej, kolik v roce {year} zaplatíš na dani, sociálním a zdravotním pojištění ve třech variantách a co se ti vyplatí.",
+      "fieldIncome": "Roční příjmy z podnikání v roce {year}",
+      "fieldIncomeHelp": "Celkové příjmy (tržby) bez odečtení výdajů.",
+      "fieldFlatRate": "Druh činnosti (výdajový paušál)",
+      "fieldFlatRateHelp": "Podle druhu činnosti se určí výdajový paušál i pásmo paušální daně.",
+      "fieldExpenses": "Jak uplatníš výdaje v přiznání?",
+      "optExpensesFlat": "Výdajovým paušálem",
+      "optExpensesActual": "Skutečnými výdaji",
+      "fieldActual": "Skutečné roční výdaje",
+      "fieldVat": "Jsi plátce DPH?",
+      "fieldChildren": "Počet vyživovaných dětí",
+      "fieldChildrenHelp": "Bez dětí se ZTP/P; u nich je zvýhodnění dvojnásobné a kalkulačka ho nepočítá.",
+      "fieldActivity": "Podnikání je",
+      "fieldContact": "Přijímáš kontaktní platby (hotovost, karta nebo QR na místě)?",
+      "fieldContactHelp": "Jen kontaktní platby se od {launch} evidují v EET 2.0. Pro jistotu projdi záložku Mám EET?.",
+      "calculate": "Spočítat",
+      "validationIncome": "Zadej roční příjmy jako celé číslo, nejméně {min}.",
+      "validationActual": "Zadej skutečné výdaje jako celé číslo (0 nebo víc).",
+      "validationChildren": "Zadej počet dětí jako celé číslo (0 nebo víc).",
+      "resultTitle": "Výsledek",
+      "colVariant": "Varianta",
+      "colAnnual": "Ročně",
+      "colMonthly": "Měsíčně",
+      "colDiff": "Rozdíl",
+      "cheapestBadge": "Nejlevnější",
+      "unavailable": "Nedostupné",
+      "variantFlat": "Paušální daň ({band})",
+      "variantFlatNoBand": "Paušální daň",
+      "variantClassicFlat": "Přiznání, výdajový paušál {rate}",
+      "variantClassicActual": "Přiznání, skutečné výdaje",
+      "variantEetOff": "EET OFF (1. pásmo + přirážka)",
+      "summaryCheapest": "Nejlevněji vychází varianta „{variant}“: {annual} ročně. Ušetříš {diff} proti variantě „{next}“.",
+      "summaryOnly": "Dostupná je jen varianta „{variant}“: {annual} ročně.",
+      "summaryEqual": "Varianty „{variant}“ a „{next}“ vycházejí stejně: {annual} ročně.",
+      "breakdownTitle": "Jak jsme počítali přiznání",
+      "lineProfit": "Zisk (základ daně): {income} − výdaje {expenses} = {profit}",
+      "lineTax": "Daň: {taxGross} − sleva na poplatníka {credit}{high} = {taxAfterCredit}",
+      "lineHigh": " (z toho 23 % nad {threshold})",
+      "lineChildren": "Daňové zvýhodnění na děti: −{children} → daň {tax}",
+      "lineBonus": ", daňový bonus {bonus} (stát ti ho vyplatí, ve výpočtu snižuje odvody)",
+      "lineNoBonus": "Daňový bonus se nevyplatí: příjmy nedosahují {limit} (6 × minimální mzda).",
+      "lineSocial": "Sociální pojištění: max(55 % zisku, minimum {min}) = základ {base} × 29,2 % = {amount}",
+      "lineSocialNone": "Sociální pojištění: 0 Kč, zisk z vedlejší činnosti nepřesáhl rozhodnou částku {threshold}.",
+      "lineHealth": "Zdravotní pojištění: max(50 % zisku, minimum {min}) = základ {base} × 13,5 % = {amount}",
+      "lineFlatParts": "{band}: {monthly} měsíčně = daň {tax} + sociální {social} + zdravotní {health}.",
+      "lineEetOff": "EET OFF: {band1} + přirážka {surcharge} měsíčně = {monthly} měsíčně.",
+      "reasonVat": "Plátce DPH nemůže mít paušální daň (výjimkou je jen identifikovaná osoba).",
+      "reasonEmployee": "Zaměstnanec nemůže být v paušálním režimu (s výjimkou příjmů zdaněných srážkovou daní).",
+      "reasonOverMax": "Paušální daň je jen pro příjmy do {limit}. Ty jsi zadal {income}.",
+      "reasonEetNoFlat": "EET OFF je jen pro OSVČ v paušálním režimu. {reason}",
+      "reasonEetBand": "EET OFF je jen pro 1. pásmo paušální daně. S druhem činnosti „{flat}“ je limit 1. pásma {limit}, ty máš {income}, takže ti vychází {band}.",
+      "reasonEetLimit": "EET OFF je jen pro příjmy do {limit}. Ty jsi zadal {income}.",
+      "reasonEetNoContact": "Nepřijímáš kontaktní platby, takže evidovat tržby nemusíš. Přirážka EET OFF by byla zbytečný výdaj.",
+      "bandsTitle": "Na která pásma máš nárok",
+      "bandOk": "{band}: ano (limit {limit}), {monthly} měsíčně",
+      "bandNo": "{band}: ne, s druhem činnosti „{flat}“ je limit {limit}",
+      "noteChildrenFlat": "V paušálním režimu nepodáváš přiznání, takže si neuplatníš slevu na poplatníka ani daňové zvýhodnění na děti ({children} ročně). Proto přiznání vychází s dětmi výhodněji.",
+      "noteEvidence": "Přijímáš kontaktní platby, takže u paušální daně bez EET OFF i u přiznání budeš od {launch} evidovat tržby. Aplikace MOJE eet je zdarma.",
+      "notePrevYear": "Limity pásem i EET OFF se posuzují podle příjmů za rok {prevYear}. Počítáme, že byly podobné jako zadané příjmy.",
+      "noteNotIncluded": "Nepočítáme slevu za evidenci tržeb (až 5 000 Kč), slevu na manžela nebo manželku, na studenta, školkovné, nemocenské pojištění ani odčitatelné položky (penzijní spoření, dary, úroky z hypotéky).",
+      "noteBand1Status": "Výše 1. pásma pro rok {year} je dopočtená ze zákona. Finanční správa ji k {verified} ještě nezveřejnila.",
+      "noteActualChart": "Graf počítá přiznání s výdajovým paušálem {rate}, i když jsi zadal skutečné výdaje.",
+      "chartTitle": "Roční odvody podle výše příjmů",
+      "chartDesc": "Daň + sociální + zdravotní pojištění za rok {year}, výdajový paušál {rate}, počet dětí: {children}, {activity}.",
+      "chartAxisX": "Roční příjmy",
+      "chartAxisY": "Odvody za rok",
+      "chartYou": "Ty",
+      "chartBreakEven": "Od příjmů {income} vychází levněji {cheaper}.",
+      "chartBreakEvenNone": "V rozsahu grafu se pořadí paušální daně a přiznání nemění.",
+      "chartTableSummary": "Zobrazit hodnoty grafu v tabulce",
+      "chartLegendFlat": "Paušální daň",
+      "chartLegendClassic": "Přiznání",
+      "chartLegendEetOff": "EET OFF",
+      "deadlinesTitle": "Termíny a formuláře",
+      "linksTitle": "Formuláře a odkazy",
+      "disclaimer": "Orientační výpočet, nejde o daňové poradenství.",
+      "verifiedLabel": "Pravidla ověřena",
+      "statusLabel": "Stav ověření parametrů",
+      "currencyMonthly": "měsíčně",
+      "cheaperFlat": "paušální daň",
+      "cheaperClassic": "přiznání",
+      "firstPaymentAmount": "Tvoje měsíční záloha: {amount}.",
+      "statusOfficial": "ověřeno na oficiálním webu",
+      "statusSecondary": "oficiální web nebyl dostupný, ověřeno shodou více zdrojů a přepočtem",
+      "statusDerived": "dopočteno ze zákona, úřad zatím nezveřejnil",
+      "statusItemAverageWage": "Průměrná mzda 2027: {value}",
+      "statusItemSocial": "Sociální pojištění: min. záloha {main} (vedlejší {side}), rozhodná částka {threshold}",
+      "statusItemHealth": "Zdravotní pojištění: min. záloha {main}",
+      "statusItemTax": "Daň: sleva na poplatníka {credit}, děti {children}, 23 % nad {threshold}",
+      "statusItemBand": "{band}: {monthly} měsíčně",
+      "chartUnavailable": "nedostupné",
+      "chartTooltipIncome": "Příjmy {income}",
+      "chartHelp": "Najetím nebo šipkami na grafu zobrazíš hodnoty pro konkrétní příjmy.",
+      "colIncome": "Příjmy",
+      "yes": "Ano",
+      "no": "Ne",
+      "emptyResult": "Zadej roční příjmy a výsledek se spočítá.",
+      "panelPrivacy": "Zadané údaje zůstávají jen v tomto okně prohlížeče. Nic se neukládá ani neodesílá."
+    }
   }
 }
